@@ -175,9 +175,20 @@ def game_loop():
 
         pygame.display.update()
 
-menu = pygame_menu.Menu(300, 400, 'WELCOME', theme=pygame_menu.themes.THEME_BLUE)
+my_theme = pygame_menu.themes.THEME_BLUE.copy()
+
+background_image = pygame_menu.baseimage.BaseImage(
+    image_path = pygame_menu.baseimage.IMAGE_EXAMPLE_GRAY_LINES,
+    drawing_mode = pygame_menu.baseimage.IMAGE_MODE_REPEAT_XY
+)
+
+my_theme.background_color = background_image
+my_theme.widget_font = pygame_menu.font.FONT_8BIT
+
+menu = pygame_menu.Menu(300, 400, 'Welcome to Walls', theme=my_theme)
 menu.add_button('Play', game_loop)
 menu.add_button('Quit', pygame_menu.events.EXIT)
+menu.add_image('assets/wall5.jpg', scale=(0.5, 0.25))
 menu.mainloop(screen)
 
 pygame.quit()
