@@ -37,21 +37,21 @@ def game_loop():
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_ESCAPE:
                     isRunning = False
-                elif ev.key == pygame.K_w or ev.key == pygame.K_UP:
+                elif ev.key == pygame.K_w:
                     newX += cos(r.player['angle'] * pi / 180) * r.stepSize
                     newY += sin(r.player['angle'] * pi / 180) * r.stepSize
-                elif ev.key == pygame.K_s or ev.key == pygame.K_DOWN:
+                elif ev.key == pygame.K_s:
                     newX -= cos(r.player['angle'] * pi / 180) * r.stepSize
                     newY -= sin(r.player['angle'] * pi / 180) * r.stepSize
-                elif ev.key == pygame.K_a or ev.key == pygame.K_LEFT:
+                elif ev.key == pygame.K_a:
                     newX -= cos((r.player['angle'] + 90) * pi / 180) * r.stepSize
                     newY -= sin((r.player['angle'] + 90) * pi / 180) * r.stepSize
-                elif ev.key == pygame.K_d or ev.key == pygame.K_RIGHT:
+                elif ev.key == pygame.K_d:
                     newX += cos((r.player['angle'] + 90) * pi / 180) * r.stepSize
                     newY += sin((r.player['angle'] + 90) * pi / 180) * r.stepSize
-                elif ev.key == pygame.K_q or ev.key == pygame.K_z:
+                elif ev.key == pygame.K_q:
                     r.player['angle'] -= 5
-                elif ev.key == pygame.K_e or ev.key == pygame.K_x:
+                elif ev.key == pygame.K_e:
                     r.player['angle'] += 5
 
                 i, j = int(newX / r.blocksize), int(newY / r.blocksize)
