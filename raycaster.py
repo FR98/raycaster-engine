@@ -17,7 +17,7 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 30)
 
 r = Raycaster(screen)
-r.load_map('map{}.txt'.format(r.current_level))
+r.load_map('maps/map{}.txt'.format(r.current_level))
 
 pygame.mixer.init()
 pygame.mixer.music.load('assets/soundtrack.mp3')

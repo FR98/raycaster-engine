@@ -1,3 +1,4 @@
+import random
 import pygame
 import pygame_menu
 from math import cos, sin, pi, atan2
@@ -23,42 +24,6 @@ textures = {
     '5': pygame.image.load('assets/wall5.jpg')
 }
 
-enemies = [
-    {
-        "x": 100,
-        "y": 220,
-        "texture" : pygame.image.load('assets/enemy1.png')
-    },
-    {
-        "x": 270,
-        "y": 220,
-        "texture" : pygame.image.load('assets/enemy2.png')
-    },
-    {
-        "x": 470,
-        "y": 420,
-        "texture" : pygame.image.load('assets/enemy3.png')
-    }
-]
-
-gemas = {
-    0: {
-        "x": 100,
-        "y": 175,
-        "texture" : pygame.image.load('assets/gema.png')
-    },
-    1: {
-        "x": 250,
-        "y": 420,
-        "texture" : pygame.image.load('assets/gema.png')
-    },
-    2: {
-        "x": 450,
-        "y": 420,
-        "texture" : pygame.image.load('assets/gema.png')
-    }
-}
-
 
 class Raycaster(object):
     def __init__(self, screen):
@@ -77,6 +42,40 @@ class Raycaster(object):
             "angle" : 0,
             "fov" : 60
         }
+        self.gemas = {
+            0: {
+                "x": 100,
+                "y": 175,
+                "texture" : pygame.image.load('assets/gema.png')
+            },
+            1: {
+                "x": 250,
+                "y": 420,
+                "texture" : pygame.image.load('assets/gema.png')
+            },
+            2: {
+                "x": 450,
+                "y": 420,
+                "texture" : pygame.image.load('assets/gema.png')
+            }
+        }
+        self.enemies = [
+            {
+                "x": 100,
+                "y": 220,
+                "texture" : pygame.image.load('assets/enemy1.png')
+            },
+            {
+                "x": 270,
+                "y": 220,
+                "texture" : pygame.image.load('assets/enemy2.png')
+            },
+            {
+                "x": 470,
+                "y": 420,
+                "texture" : pygame.image.load('assets/enemy3.png')
+            }
+        ]
 
     def load_map(self, filename):
         self.map = []
@@ -99,8 +98,10 @@ class Raycaster(object):
         spriteAngle = atan2(sprite['y'] - self.player['y'], sprite['x'] - self.player['x'])
 
         aspectRatio = sprite["texture"].get_width() / sprite["texture"].get_height()
-        if spriteDist != 0:
-            spriteHeight = (self.height / spriteDist) * size
+        if spriteDist == 0:
+            spriteDist = 1
+
+        spriteHeight = (self.height / spriteDist) * size
         spriteWidth = spriteHeight * aspectRatio
 
         angleRads = self.player['angle'] * pi / 180
@@ -168,15 +169,35 @@ class Raycaster(object):
                 texColor = img.get_at((tx, ty))
                 self.screen.set_at((x, y), texColor)
         
-        for enemy in enemies:
+        for enemy in self.enemies:
             self.screen.fill(pygame.Color("black"), (enemy['x'], enemy['y'], 3, 3))
             self.drawSprite(enemy, 15)
 
-        self.current_gema = gemas[self.current_level]
-        if (int(self.current_gema['x']) in range(int(self.player['x'] - 5), int(self.player['x'] + 5))) and (int(self.current_gema['y']) in range(int(self.player['y'] - 5), int(self.player['y'] + 5))):
+        self.current_gema = self.gemas[self.current_level]
+
+        for enemy in self.enemies:
+            if (int(enemy['x']) in range(int(self.player['x'] - 5), int(self.player['x'] + 5))) and \
+                (int(enemy['y']) in range(int(self.player['y'] - 5), int(self.player['y'] + 5))):
+                if bool(random.getrandbits(1)):
+                    print("Is Impostor")
+                    if self.current_level > 0:
+                        self.current_level -= 1
+                    self.current_gema = self.gemas[self.current_level]
+                    self.load_map('maps/map{}.txt'.format(self.current_level))
+                    self.player = {
+                        "x" : 75,
+                        "y" : 175,
+                        "angle" : 0,
+                        "fov" : 60
+                    }
+                    pygame.display.update()
+                    break
+
+        if (int(self.current_gema['x']) in range(int(self.player['x'] - 5), int(self.player['x'] + 5))) and \
+            (int(self.current_gema['y']) in range(int(self.player['y'] - 5), int(self.player['y'] + 5))):
             self.current_level += 1
-            self.current_gema = gemas[self.current_level]
-            self.load_map('map{}.txt'.format(self.current_level))
+            self.current_gema = self.gemas[self.current_level]
+            self.load_map('maps/map{}.txt'.format(self.current_level))
             pygame.display.update()
 
         self.screen.fill(pygame.Color("black"), (self.current_gema['x'], self.current_gema['y'], 3, 3))
