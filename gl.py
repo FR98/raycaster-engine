@@ -168,7 +168,7 @@ class Raycaster(object):
                 ty = int(ty * img.get_height())
                 texColor = img.get_at((tx, ty))
                 self.screen.set_at((x, y), texColor)
-        
+
         for enemy in self.enemies:
             self.screen.fill(pygame.Color("black"), (enemy['x'], enemy['y'], 3, 3))
             self.drawSprite(enemy, 15)

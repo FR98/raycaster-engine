@@ -59,11 +59,10 @@ def game_loop():
                 if r.map[j][i] == ' ':
                     r.player['x'] = newX
                     r.player['y'] = newY
-            elif ev.type == pygame.MOUSEBUTTONDOWN or ev.type == pygame.MOUSEBUTTONUP:
-                if ev.button == 4:
-                    r.player["angle"] -= 5
-                elif ev.button == 5:
-                    r.player["angle"] += 5
+            elif ev.type == pygame.MOUSEMOTION:
+                mouseX, mouseY = pygame.mouse.get_pos()
+                posX, posY = r.player['x'], r.player['y']
+                r.player['angle'] = (180/pi) * -atan2(mouseX - posX , mouseY - posY) + 90
 
         screen.fill(pygame.Color("gray"))
         screen.fill(pygame.Color("saddlebrown"), (int(r.width / 2), 0, int(r.width / 2), int(r.height / 2)))
